@@ -21,6 +21,10 @@ var style = {
     img_end: ' />'
     
 }
+var zhihuStyle = {
+
+
+}
 
 
 var htmlGenerator = {
@@ -32,7 +36,7 @@ var htmlGenerator = {
 
 
         _s = htmlGenerator[_s.type](source.content);
-        console.log(source.content);
+        // console.log(source.content);
 
         document.write(_s);
     },
@@ -78,7 +82,9 @@ var textHandler = {
         _t = _t.slice(i_s); //_t = cuted text 
         let i_e = _t.indexOf(contentKey_end);
         let _c = _t.slice(0, i_e);
-        _c = _c[0].toUpperCase()+_c.slice(1);
+
+        // _c =_c[0]&&( _c[0].toUpperCase()+_c.slice(1));
+        // cna not put UpperCase to here cause this function is a text handler not sure is img/ text
 
         return {
             content: _c,
@@ -93,12 +99,13 @@ var textHandler = {
     findWord: function (text) {
         //text = source text/html replaced next line.
         let result = textHandler.getContent(textHandler.key_word_s, textHandler.key_word_e, text);
-        result.content&&(result.content = result.content[0].toUpperCase()+result.content.slice(1));
-        // console.log(result.content);
+        // result.content&&(result.content = result.content[0].toUpperCase()+result.content.slice(1));
+        
         
         return result;
     },
     findImg: function (text) {
+
         return textHandler.getContent(textHandler.key_img_s, textHandler.key_img_e, text);
     },
     isChinese: function (content) {
@@ -161,7 +168,7 @@ function contentAnalysis(zhihuContent) {
 }
 
 function main(source) {
-    console.log(source);
+    // console.log(source);
 
     let _s = source.split('\n').join();
     //source text replaced next line.
@@ -180,24 +187,45 @@ function zhihuRender(source) {
     let _result= new String;
     var _word = textHandler.findWord(_s); //{content,contentStart,contentEnd}
     while (_word) {
-        if(_word.content == ""){
 
-        }
-        else if (!textHandler.isChinese(_word.content)) {
-            _result += (
-                _s.slice(0, _word.contentStart) +
-                '<i>' +
-                _word.content +
-                '</i>' +
-                style.en_p_end
-            );
-        } else {
-            _result += _s.slice(0, _word.contentEnd);
+        if (textHandler.isChinese(_word.content)) { // if is Chinese
+            // if(_word.content!= ""){
+                // }
+                _result += _s.slice(0, _word.contentEnd);
+                
+            } else { // English/other type : do nothing, just push to result
+                if (_word.content == "" || _word.content == " ") { // if empty dont push to result
+                }
+                        _result += (
+                            _s.slice(0, _word.contentStart) +
+                            '<i>' +
+                            _word.content +
+                            '</i>' +
+                            style.en_p_end
+                        );
+
+            // }else{
+                 
+            // }
         }
         _s = _s.slice(_word.contentEnd);
         _word = textHandler.findWord(_s); //{content,contentStart,contentEnd}
     }
     _result+=_s;
+    document.write("[...document.getElementsByTagName('br')].map(i=>i.parentElement.parentElement.parentElement.parentElement.remove())")
     document.write(_result);
 
+    var _getOutEmpty = [...document.getElementsByTagName('i')];
+    _getOutEmpty.map(i => { 
+        if(i.textContent ==false){
+         i.parentElement.parentElement.parentElement.remove()
+    }  
+    // else{
+    //     i.parentElement.textContent = i.textContent;
+    //         i.style.fontStyle =' italic';
+    //          i.remove();
+    // }
+     });
+
+    
 }
