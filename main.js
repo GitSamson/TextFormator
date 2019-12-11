@@ -212,7 +212,6 @@ function zhihuRender(source) {
         _word = textHandler.findWord(_s); //{content,contentStart,contentEnd}
     }
     _result+=_s;
-    document.write("[...document.getElementsByTagName('br')].map(i=>i.parentElement.parentElement.parentElement.parentElement.remove())")
     document.write(_result);
 
     var _getOutEmpty = [...document.getElementsByTagName('i')];
