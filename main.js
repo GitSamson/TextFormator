@@ -19,7 +19,7 @@ var style = {
     img_start: '<img src= '
     ,
     img_end: ' />'
-    
+
 }
 var zhihuStyle = {
 
@@ -33,12 +33,13 @@ var htmlGenerator = {
         // source  = {type : "img/text", content : " "}
         let _s = source;
         if (_s.type == 'text') { _s.type = textHandler.isChinese(_s.content) ? 'cn' : 'en' }
+        // console.log(_s);
 
 
         _s = htmlGenerator[_s.type](source.content);
         // console.log(source.content);
 
-        document.write(_s);
+        preview.contentDocument.write(_s);
     },
     en: function (text) {
         return (
@@ -100,8 +101,8 @@ var textHandler = {
         //text = source text/html replaced next line.
         let result = textHandler.getContent(textHandler.key_word_s, textHandler.key_word_e, text);
         // result.content&&(result.content = result.content[0].toUpperCase()+result.content.slice(1));
-        
-        
+
+
         return result;
     },
     findImg: function (text) {
@@ -184,47 +185,57 @@ function zhihuRender(source) {
 
     let _s = source
     //source text replaced next line.
-    let _result= new String;
+    let _result = new String;
     var _word = textHandler.findWord(_s); //{content,contentStart,contentEnd}
     while (_word) {
 
         if (textHandler.isChinese(_word.content)) { // if is Chinese
             // if(_word.content!= ""){
-                // }
-                _result += _s.slice(0, _word.contentEnd);
-                
-            } else { // English/other type : do nothing, just push to result
-                if (_word.content == "" || _word.content == " ") { // if empty dont push to result
-                }
-                        _result += (
-                            _s.slice(0, _word.contentStart) +
-                            '<i>' +
-                            _word.content +
-                            '</i>' +
-                            style.en_p_end
-                        );
+            // }
+            _result += _s.slice(0, _word.contentEnd);
+
+        } else { // English/other type : do nothing, just push to result
+            if (_word.content == "" || _word.content == " ") { // if empty dont push to result
+            }
+            _result += (
+                _s.slice(0, _word.contentStart) +
+                '<i>' +
+                _word.content +
+                '</i>' +
+                style.en_p_end
+            );
 
             // }else{
-                 
+
             // }
         }
         _s = _s.slice(_word.contentEnd);
         _word = textHandler.findWord(_s); //{content,contentStart,contentEnd}
     }
-    _result+=_s;
-    document.write(_result);
+    _result += _s;
+    preview.contentDocument.write(_result);
 
-    var _getOutEmpty = [...document.getElementsByTagName('i')];
-    _getOutEmpty.map(i => { 
-        if(i.textContent ==false){
-         i.parentElement.parentElement.parentElement.remove()
-    }  
-    // else{
-    //     i.parentElement.textContent = i.textContent;
-    //         i.style.fontStyle =' italic';
-    //          i.remove();
-    // }
-     });
+    var _getOutEmpty = [...preview.contentDocument.getElementsByTagName('i')];
+    _getOutEmpty.map(i => {
+        if (i.textContent == false) {
+            i.parentElement.parentElement.parentElement.remove();
+        }
+    });
 
-    
+
 }
+function trans(doc) {
+
+    preview.contentDocument.write(doc);
+    let _span = [...$('#preview').contents().find('span span')];
+    _span.map(i => {
+
+        let isCn =textHandler.isChinese( i.innerText);
+        if(!isCn){
+            getTranslation(i.innerText,i);
+        }
+
+    })
+
+}
+

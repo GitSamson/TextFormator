@@ -1,19 +1,28 @@
 <html>
-
+<head>
+    
+    <meta charset="utf-8" />
+</head>
 <body>
     <button onclick="toWechat()">Zhihu to Wechat</button>
+    <button onclick="toTranslate()">translate</button>
     <button onclick="zhihu()">Zhihu english</button>
     <div>
-    <textarea id='toWechat' style = 'width : 80% ; height: 50%'></textarea>
+        <textarea id='toWechat' style='width : 80% ; height: 30%'></textarea>
     </div>
+    <iframe id = "preview" style="width:100%; height: 65%">
+ 
+    </iframe>
 </body>
-
-<script src="./main.js">
-
-</script>
+<script src="http://shared.ydstatic.com/js/jquery/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script src="https://cdn.bootcss.com/js-sha256/0.9.0/sha256.js"></script>
+<script src="./main.js"></script>
+<script src = './youdao.js'></script>
 
 <script>
     var T = document.getElementById('toWechat');
+    var preview = document.getElementById('preview');
     T.addEventListener('paste', (event) => {
         let paste = (event.clipboardData || window.clipboardData).getData('text/html');
         // paste = source paste text/html
@@ -23,13 +32,23 @@
 
 
     function toWechat() {
+        preview.contentDocument.body.textContent = null;
         let temp = T.value;
         main(temp);
     }
-    function zhihu (){
+    function zhihu() {
+        preview.contentDocument.body.textContent = null;
+
         let temp = T.value;
         zhihuRender(temp);
     }
+    function toTranslate() {
+        preview.contentDocument.body.textContent = null;
+
+        let temp = T.value;
+        trans(temp);
+    }
+
 
 </script>
 
