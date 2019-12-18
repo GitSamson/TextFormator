@@ -14,7 +14,7 @@
  
     </iframe>
 </body>
-<script src="http://shared.ydstatic.com/js/jquery/jquery-3.1.1.min.js"></script>
+<script src="./jquery-3.1.1.min.js"></script>
 <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
 <script src="https://cdn.bootcss.com/js-sha256/0.9.0/sha256.js"></script>
 <script src="./main.js"></script>
@@ -35,18 +35,21 @@
         preview.contentDocument.body.textContent = null;
         let temp = T.value;
         main(temp);
+        T.value = preview.contentDocument.childNodes[0].innerHTML;
+
     }
     function zhihu() {
         preview.contentDocument.body.textContent = null;
-
         let temp = T.value;
         zhihuRender(temp);
+        T.value = preview.contentDocument.childNodes[0].innerHTML;
+
     }
     function toTranslate() {
         preview.contentDocument.body.textContent = null;
-
         let temp = T.value;
         trans(temp);
+        T.value = preview.contentDocument.childNodes[0].innerHTML;
     }
 
 
