@@ -13,7 +13,7 @@ function getTranslation (source,i=null){
     var sign = sha256(str1);
     var _result;
      $.ajax({
-        url: 'http://openapi.youdao.com/api',
+        url: 'https://openapi.youdao.com/api',
         type: 'post',
         dataType: 'jsonp',
         async:false,
